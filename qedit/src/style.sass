@@ -1,17 +1,68 @@
-h1
+div, section, article, header, footer, h1, h2, h3, h4, h5, h6, p, label, ul, li
+    margin: 0
+    padding: 0
+    
+h1, h2, h3, h4, h5, h6, p, label, input, textarea, li, button
     font-family: system-ui
     font-size: 100%
     font-weight: normal
     color: #555
 
-.popup
+section.popup
     width: 80%
-    margin-left: 10%
+    max-width: 480px
+    margin-left: auto
+    margin-right: auto
+    margin-top: 2em
+    border: 1px solid silver
+    border-radius: 8px
+    background: white
+    filter: drop-shadow(0 0 8px silver)
+    .container
+        margin: 1em
+        div:not(:first-child)
+            padding-top: 0.7em
+        .row
+            display: flex
+            label, p
+                flex: 0 0 auto
+            input:not(.inline), textarea
+                flex: 1
+        .row.twoliner
+            display: block
+            input:not(.inline), textarea, label, p
+                display: block
+                box-sizing: border-box
+                width: 100%
+        .row.right
+            width: fit-content
+            margin-left: auto
+        .subgroup
+            display: block
+            input:not(.inline), textarea, label, p
+                display: block
+                box-sizing: border-box
+                width: 100%
+            header
+                display: flex
+                justify-content: space-between
+        ul
+            list-style: none
+            padding-left: 1em
+            li
+                display: flex
+                padding-top: 0.3em
+        input.expanded
+            flex: 1
 
 section
     h1
+        border-bottom: 1px solid silver
+        line-height: 200%
         text-align: center
-        line-height: 150%
+    h2
+        text-align: center
+        line-height: 180%
         &::after
             content: ""
             display: block
