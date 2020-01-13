@@ -1,0 +1,32 @@
+{
+  "name": "qedit",
+  "version": "1.0.0",
+  "description": "Question Master Editor",
+  "main": "dist/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "launch": "npx electron .",
+    "build": "npx webpack"
+  },
+  "author": "S.Percentage",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+    "css-loader": "^3.4.2",
+    "electron-rebuild": "^1.8.8",
+    "node-sass": "^4.13.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "sass-loader": "^8.0.1",
+    "style-loader": "^1.1.2",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "electron": "^7.1.8",
+    "sqlite3": "^4.1.1"
+  }
+}
