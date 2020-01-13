@@ -2,35 +2,37 @@ div, section, article, header, footer, h1, h2, h3, h4, h5, h6, p, label, ul, li
     margin: 0
     padding: 0
     
-h1, h2, h3, h4, h5, h6, p, label, input, textarea, li, button
+h1, h2, h3, h4, h5, h6, p, label, input, textarea, li, button, select
     font-family: system-ui
-    font-size: 100%
+    font-size: 80%
     font-weight: normal
     color: #555
 
 section.popup
     width: 80%
-    max-width: 480px
+    max-width: 600px
     margin-left: auto
     margin-right: auto
     margin-top: 2em
     border: 1px solid silver
     border-radius: 8px
     background: white
-    filter: drop-shadow(0 0 8px silver)
+    filter: drop-shadow(0 0 8px rgba(192, 192, 192, 75%))
     .container
         margin: 1em
+        textarea
+            resize: vertical
         div:not(:first-child)
             padding-top: 0.7em
         .row
             display: flex
             label, p
                 flex: 0 0 auto
-            input:not(.inline), textarea
+            input:not(.inline), textarea, select
                 flex: 1
         .row.twoliner
             display: block
-            input:not(.inline), textarea, label, p
+            input:not(.inline), textarea, select, label, p
                 display: block
                 box-sizing: border-box
                 width: 100%
@@ -39,7 +41,7 @@ section.popup
             margin-left: auto
         .subgroup
             display: block
-            input:not(.inline), textarea, label, p
+            input:not(.inline), textarea, select, label, p
                 display: block
                 box-sizing: border-box
                 width: 100%
