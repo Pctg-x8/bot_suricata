@@ -8,7 +8,7 @@ Create table qa (
 );
 
 Create table choices (
-    q_id Integer Not null,
+    q_id Integer Not null References qa(id) on delete Cascade,
     num Integer Not null,
     a_text Text Not null,
     Unique(q_id, num, a_text)
