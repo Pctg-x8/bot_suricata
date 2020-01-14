@@ -23,7 +23,11 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
     const title = props.create ? "新しいクイズ" : "クイズを編集";
 
     const d = useDispatch();
-    const [choices, currentDifficulty] = useSelector((s: State) => [s.choices, s.difficulty]);
+    const [
+        choices, currentDifficulty, currentCorrectNum
+    ] = useSelector((s: State) => [
+        s.choices, s.difficulty, s.correctNumber
+    ]);
 
     return <section className="popup">
         <h1>{title}</h1>
@@ -56,15 +60,19 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                     </header>
                     <ul>
                         {
-                            choices.map((ch, n) => (
+                            choices.map((ch, n: number) => (
                                 <li key={n}>
-                                    <input type="radio" className="inline" name="correct" value={1} />
+                                    <input type="radio" className="inline" name="correct" value={1}
+                                        checked={currentCorrectNum == n}
+                                        onChange={_ => d(EditorActions.setCorrectNumber(n))} />
                                     <span>{n + 1}.&nbsp;</span>
                                     <input type="text" className="inline expanded"
                                         value={ch} onChange={e => d(EditorActions.updateChoiceText(n, e.target.value))} />
-                                    <button type="button">↑</button>
-                                    <button type="button">↓</button>
-                                    <button type="button" onClick={_ => d(EditorActions.removeChoice(n))}>×</button>
+                                    <button type="button" disabled={n == 0}
+                                        onClick={_ => d(EditorActions.upChoicePosition(n))}>↑</button>
+                                    <button type="button" disabled={n == choices.length - 1}
+                                        onClick={_ => d(EditorActions.downChoicePosition(n))}>↓</button>
+                                    <button type="button" onClick={_ => d(EditorActions.removeChoice(choices.length, n))}>×</button>
                                 </li>
                             ))
                         }
