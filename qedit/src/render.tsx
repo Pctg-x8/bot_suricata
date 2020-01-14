@@ -86,8 +86,8 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                     <textarea id="a_text_desc_incorrect" rows={2}></textarea>
                 </div>
                 <div className="row right">
-                    {!props.create && <button type="button">キャンセル</button>}
-                    <button type="submit">作成</button>
+                    <button type="button">取り消し</button>
+                    <button type="submit">{props.create ? "作成" : "保存"}</button>
                 </div>
             </form>
         </div>
@@ -97,7 +97,7 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
 function AppMain(): JSX.Element
 {
     return <div>
-        <QuestionEditorPopup create={false} />
+        <QuestionEditorPopup create={true} />
     </div>;
 }
 
