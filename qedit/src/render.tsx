@@ -28,6 +28,16 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
     ] = useSelector((s: State) => [
         s.choices, s.difficulty, s.correctNumber
     ]);
+    const qText = React.useRef<HTMLTextAreaElement>();
+    const aDescCorrect = React.useRef<HTMLTextAreaElement>();
+    const aDescIncorrect = React.useRef<HTMLTextAreaElement>();
+
+    const saveCurrent = React.useCallback(() =>
+    {
+        console.log(qText.current.value);
+        console.log(aDescCorrect.current.value);
+        console.log(aDescIncorrect.current.value);
+    }, [qText, aDescCorrect, aDescIncorrect]);
 
     const choiceUis = choices.map((ch, n: number) => (
         <li key={n}>
@@ -68,7 +78,7 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                 </div>
                 <div className="row twoliner">
                     <label htmlFor="q_text">クイズ内容:</label>
-                    <textarea id="q_text" rows={5}></textarea>
+                    <textarea id="q_text" rows={5} ref={qText}></textarea>
                 </div>
                 <div className="subgroup">
                     <header>
@@ -79,15 +89,15 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                 </div>
                 <div className="row twoliner">
                     <label htmlFor="a_text_desc_correct">正解時の解説文:</label>
-                    <textarea id="a_text_desc_correct" rows={2}></textarea>
+                    <textarea id="a_text_desc_correct" rows={2} ref={aDescCorrect}></textarea>
                 </div>
                 <div className="row twoliner">
                     <label htmlFor="a_text_desc_incorrect">不正解時の解説文:</label>
-                    <textarea id="a_text_desc_incorrect" rows={2}></textarea>
+                    <textarea id="a_text_desc_incorrect" rows={2} ref={aDescIncorrect}></textarea>
                 </div>
                 <div className="row right">
                     <button type="button">取り消し</button>
-                    <button type="submit">{props.create ? "作成" : "保存"}</button>
+                    <button type="button" onClick={saveCurrent}>{props.create ? "作成" : "保存"}</button>
                 </div>
             </form>
         </div>
