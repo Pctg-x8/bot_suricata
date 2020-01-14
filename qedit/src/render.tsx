@@ -3,8 +3,16 @@ import "./style.sass";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as Redux from "redux";
-import { Provider, useSelector } from "react-redux";
+import { Provider, useSelector, useDispatch } from "react-redux";
 import Reducers, { State } from "./reducer/index";
+import * as EditorActions from "./action/editor";
+
+const DifficultyDescText = [
+    "少しの知識でも楽しめる、簡単なテスト、ですの",
+    "図鑑を見たり、解説をよく読んだりしてるなら解けるレベル、ですわね",
+    "オマケ的なパネルや、図鑑をよく読み込んでいないと解けない問題ですの！",
+    "博士論文を読み込むレベルの問題、ですわね......"
+];
 
 type EditorPopupProperties =
 {
@@ -14,7 +22,8 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
 {
     const title = props.create ? "新しいクイズ" : "クイズを編集";
 
-    const [choicesNum] = useSelector((s: State) => [s.choicesNum]);
+    const d = useDispatch();
+    const [choices, currentDifficulty] = useSelector((s: State) => [s.choices, s.difficulty]);
 
     return <section className="popup">
         <h1>{title}</h1>
@@ -26,12 +35,15 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                 </div>
                 <div className="row">
                     <label htmlFor="difficulty">推定難易度:&nbsp;</label>
-                    <select id="difficulty">
-                        <option value={1}>Beginner(1)</option>
-                        <option value={2}>Intermediate(2)</option>
-                        <option value={3}>Advanced(3)</option>
-                        <option value={4}>Expert(4)</option>
+                    <select id="difficulty" onChange={e => d(EditorActions.changeDifficulty(parseInt(e.target.value)))}>
+                        <option value={1} selected={currentDifficulty == 1}>Beginner(1)</option>
+                        <option value={2} selected={currentDifficulty == 2}>Intermediate(2)</option>
+                        <option value={3} selected={currentDifficulty == 3}>Advanced(3)</option>
+                        <option value={4} selected={currentDifficulty == 4}>Expert(4)</option>
                     </select>
+                </div>
+                <div className="row nospace">
+                    <p style={{ paddingLeft: "6em", opacity: 0.5, fontStyle: "italic" }}>{DifficultyDescText[currentDifficulty - 1]}</p>
                 </div>
                 <div className="row twoliner">
                     <label htmlFor="q_text">クイズ内容:</label>
@@ -40,17 +52,19 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                 <div className="subgroup">
                     <header>
                         <h3>選択肢:</h3>
-                        <button type="button">＋</button>
+                        <button type="button" onClick={_ => d(EditorActions.newChoice())}>＋</button>
                     </header>
                     <ul>
                         {
-                            [...new Array(choicesNum)].map((_, n) => (
+                            choices.map((ch, n) => (
                                 <li key={n}>
                                     <input type="radio" className="inline" name="correct" value={1} />
-                                    <input type="text" className="inline expanded" />
+                                    <span>{n + 1}.&nbsp;</span>
+                                    <input type="text" className="inline expanded"
+                                        value={ch} onChange={e => d(EditorActions.updateChoiceText(n, e.target.value))} />
                                     <button type="button">↑</button>
                                     <button type="button">↓</button>
-                                    <button type="button">×</button>
+                                    <button type="button" onClick={_ => d(EditorActions.removeChoice(n))}>×</button>
                                 </li>
                             ))
                         }

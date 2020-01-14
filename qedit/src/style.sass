@@ -22,12 +22,14 @@ section.popup
         margin: 1em
         textarea
             resize: vertical
-        div:not(:first-child)
+        div:not(:first-child):not(.nospace)
             padding-top: 0.7em
         .row
             display: flex
             label, p
                 flex: 0 0 auto
+            label
+                vertical-align: middle
             input:not(.inline), textarea, select
                 flex: 1
         .row.twoliner

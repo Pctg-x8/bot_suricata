@@ -1,11 +1,14 @@
 
 import * as Redux from "redux";
-import { choicesNum } from "./editor";
+import { choices, difficulty } from "./editor";
+import { Choice } from "./types";
 
 export type State = {
-    choicesNum: number
+    choices: Choice[],
+    difficulty: number
 };
 
 export default Redux.combineReducers<State>({
-    choicesNum
+    choices,
+    difficulty
 });
