@@ -1,6 +1,7 @@
 const path = require("path");
 
 const mainMod = {
+    mode: "development",
     entry: "./src/main.ts",
     target: "electron-main",
     node: {
@@ -21,6 +22,7 @@ const mainMod = {
     }
 };
 const renderMod = {
+    mode: "development",
     entry: "./src/render.tsx",
     target: "electron-renderer",
     output: {

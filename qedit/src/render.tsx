@@ -2,6 +2,9 @@
 import "./style.sass";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import * as Redux from "redux";
+import { Provider, useSelector } from "react-redux";
+import Reducers, { State } from "./reducer/index";
 
 type EditorPopupProperties =
 {
@@ -10,6 +13,8 @@ type EditorPopupProperties =
 function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
 {
     const title = props.create ? "新しいクイズ" : "クイズを編集";
+
+    const [choicesNum] = useSelector((s: State) => [s.choicesNum]);
 
     return <section className="popup">
         <h1>{title}</h1>
@@ -38,16 +43,17 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                         <button type="button">＋</button>
                     </header>
                     <ul>
-                        <li>
-                            <input type="radio" className="inline" name="correct" value={1} />
-                            <input type="text" className="inline expanded" />
-                            <button type="button">×</button>
-                        </li>
-                        <li>
-                            <input type="radio" className="inline" name="correct" value={2} />
-                            <input type="text" className="inline expanded" />
-                            <button type="button">×</button>
-                        </li>
+                        {
+                            [...new Array(choicesNum)].map((_, n) => (
+                                <li key={n}>
+                                    <input type="radio" className="inline" name="correct" value={1} />
+                                    <input type="text" className="inline expanded" />
+                                    <button type="button">↑</button>
+                                    <button type="button">↓</button>
+                                    <button type="button">×</button>
+                                </li>
+                            ))
+                        }
                     </ul>
                 </div>
                 <div className="row twoliner">
@@ -73,4 +79,6 @@ function AppMain(): JSX.Element
     </div>;
 }
 
-ReactDOM.render(<AppMain />, document.getElementById("app"));
+const store = Redux.createStore(Reducers);
+
+ReactDOM.render(<Provider store={store}><AppMain /></Provider>, document.getElementById("app"));
