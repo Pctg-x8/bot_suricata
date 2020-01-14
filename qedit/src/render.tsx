@@ -29,6 +29,23 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
         s.choices, s.difficulty, s.correctNumber
     ]);
 
+    const choiceUis = choices.map((ch, n: number) => (
+        <li key={n}>
+            <input type="radio" className="inline" name="correct" value={1}
+                checked={currentCorrectNum == n}
+                onChange={_ => d(EditorActions.setCorrectNumber(n))} />
+            <span>{n + 1}.&nbsp;</span>
+            <input type="text" className="inline expanded"
+                value={ch} onChange={e => d(EditorActions.updateChoiceText(n, e.target.value))} />
+            <button type="button" disabled={n == 0}
+                onClick={_ => d(EditorActions.upChoicePosition(n))}>↑</button>
+            <button type="button" disabled={n == choices.length - 1}
+                onClick={_ => d(EditorActions.downChoicePosition(n))}>↓</button>
+            <button type="button"
+                disabled={choices.length <= 1}
+                onClick={_ => d(EditorActions.removeChoice(choices.length, n))}>×</button>
+        </li>
+    ));
     return <section className="popup">
         <h1>{title}</h1>
         <div className="container">
@@ -58,25 +75,7 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                         <h3>選択肢:</h3>
                         <button type="button" onClick={_ => d(EditorActions.newChoice())}>＋</button>
                     </header>
-                    <ul>
-                        {
-                            choices.map((ch, n: number) => (
-                                <li key={n}>
-                                    <input type="radio" className="inline" name="correct" value={1}
-                                        checked={currentCorrectNum == n}
-                                        onChange={_ => d(EditorActions.setCorrectNumber(n))} />
-                                    <span>{n + 1}.&nbsp;</span>
-                                    <input type="text" className="inline expanded"
-                                        value={ch} onChange={e => d(EditorActions.updateChoiceText(n, e.target.value))} />
-                                    <button type="button" disabled={n == 0}
-                                        onClick={_ => d(EditorActions.upChoicePosition(n))}>↑</button>
-                                    <button type="button" disabled={n == choices.length - 1}
-                                        onClick={_ => d(EditorActions.downChoicePosition(n))}>↓</button>
-                                    <button type="button" onClick={_ => d(EditorActions.removeChoice(choices.length, n))}>×</button>
-                                </li>
-                            ))
-                        }
-                    </ul>
+                    <ul>{choiceUis}</ul>
                 </div>
                 <div className="row twoliner">
                     <label htmlFor="a_text_desc_correct">正解時の解説文:</label>
