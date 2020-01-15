@@ -66,11 +66,13 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                 </div>
                 <div className="row">
                     <label htmlFor="difficulty">推定難易度:&nbsp;</label>
-                    <select id="difficulty" onChange={e => d(EditorActions.changeDifficulty(parseInt(e.target.value)))}>
-                        <option value={1} selected={currentDifficulty == 1}>Beginner(1)</option>
-                        <option value={2} selected={currentDifficulty == 2}>Intermediate(2)</option>
-                        <option value={3} selected={currentDifficulty == 3}>Advanced(3)</option>
-                        <option value={4} selected={currentDifficulty == 4}>Expert(4)</option>
+                    <select id="difficulty"
+                        value={currentDifficulty}
+                        onChange={e => d(EditorActions.changeDifficulty(parseInt(e.target.value)))}>
+                        <option value={1}>Beginner(1)</option>
+                        <option value={2}>Intermediate(2)</option>
+                        <option value={3}>Advanced(3)</option>
+                        <option value={4}>Expert(4)</option>
                     </select>
                 </div>
                 <div className="row nospace">
