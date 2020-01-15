@@ -3,13 +3,21 @@ import * as Redux from "redux";
 import { ParameterizedAction, Choice } from "./types";
 import * as Action from "../action/editor";
 
-type RemoveChoiceAction = { type: typeof Action.REMOVE_CHOICE, payload: [number, number] };
-type UnparameteredChoiceAction = { type: typeof Action.NEW_CHOICE };
-type UpdateChoiceTextAction = { type: typeof Action.UPDATE_CHOICE_TEXT, payload: [number, string] };
-type UpDownChoiceAction = { type: typeof Action.UP_CHOICE | typeof Action.DOWN_CHOICE, payload: number };
-type ChoicesActions = RemoveChoiceAction | UnparameteredChoiceAction | UpdateChoiceTextAction | UpDownChoiceAction;
+export function showEditorPopup(state: boolean = false, action: Redux.Action<string>): boolean
+{
+    switch (action.type)
+    {
+    case Action.CREATE_QUESTION:
+    case Action.EDIT_QUESTION:
+        return true;
+    case Action.CLOSE_QUESTION:
+        return false;
+    default: return state;
+    }
+}
 
-export function choices(state: Choice[] = [""], action: ChoicesActions): Choice[]
+type ChoicesAcceptActions = Redux.Action<typeof Action.NEW_CHOICE> | Action.RemoveChoiceAction | Action.UpdateChoiceAction | Action.UpChoiceAction | Action.DownChoiceAction;
+export function choices(state: Choice[] = [""], action: ChoicesAcceptActions): Choice[]
 {
     switch (action.type)
     {
@@ -52,10 +60,8 @@ export function difficulty(state: number = 1, action: ParameterizedAction<number
     }
 }
 
-type SetCorrectNumber = { type: typeof Action.SET_CORRECT_NUMBER, payload: number };
-type CorrectNumberActions = SetCorrectNumber | RemoveChoiceAction | UpDownChoiceAction;
-
-export function correctNumber(state: number = 0, action: CorrectNumberActions): number
+type CorrectNumberAcceptActions = Action.SetCorrectNumberAction | Action.RemoveChoiceAction | Action.UpChoiceAction | Action.DownChoiceAction;
+export function correctNumber(state: number = 0, action: CorrectNumberAcceptActions): number
 {
     switch (action.type)
     {

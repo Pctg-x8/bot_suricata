@@ -24,9 +24,9 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
 
     const d = useDispatch();
     const [
-        choices, currentDifficulty, currentCorrectNum
+        show, choices, currentDifficulty, currentCorrectNum
     ] = useSelector((s: State) => [
-        s.choices, s.difficulty, s.correctNumber
+        s.showEditorPopup, s.choices, s.difficulty, s.correctNumber
     ]);
     const qText = React.useRef<HTMLTextAreaElement>();
     const aDescCorrect = React.useRef<HTMLTextAreaElement>();
@@ -39,6 +39,7 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
         console.log(aDescIncorrect.current.value);
     }, [qText, aDescCorrect, aDescIncorrect]);
 
+    const visibilityClasses = show ? "show" : "";
     const choiceUis = choices.map((ch, n: number) => (
         <li key={n}>
             <input type="radio" className="inline" name="correct" value={1}
@@ -56,7 +57,7 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                 onClick={_ => d(EditorActions.removeChoice(choices.length, n))}>×</button>
         </li>
     ));
-    return <section className="popup">
+    return <section className={ [visibilityClasses, "popup"].join(" ") }>
         <h1>{title}</h1>
         <div className="container">
             <form>

@@ -19,6 +19,12 @@ section.popup
     border-radius: 8px
     background: white
     filter: drop-shadow(0 0 24px rgba(192, 192, 192, 75%))
+    transition: opacity 1s ease
+    &:not(.show)
+        opacity: 0
+        pointer-events: none
+    &.show
+        opacity: 1
     h1
         font-weight: bold
     .container
