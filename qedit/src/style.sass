@@ -2,8 +2,8 @@ div, section, article, header, footer, h1, h2, h3, h4, h5, h6, p, label, ul, li,
     margin: 0
     padding: 0
     user-select: none
-    
-h1, h2, h3, h4, h5, h6, p, label, input, textarea, li, button, select
+
+body
     font-family: system-ui
     font-size: 80%
     font-weight: normal
@@ -84,3 +84,21 @@ section
             height: 1px
             width: 100%
             background: -webkit-linear-gradient(0deg, rgba(160, 160, 160, 0), rgba(160, 160, 160, 0.75), rgba(160, 160, 160, 0))
+
+#qlist
+    display: grid
+    grid-template-columns: auto 1fr auto
+    padding: 2em
+    div
+        padding: 0.5em
+        border-bottom: 1px dashed #ccc
+    .head
+        font-weight: bold
+        padding: 2em
+        background: #eee
+        border-bottom: 1px solid #999
+    .numcenter
+        text-align: center
+        display: flex
+        justify-content: center
+        align-items: center
