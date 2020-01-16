@@ -111,19 +111,19 @@ function QuestionList(): JSX.Element
 {
     return <section id="qlist">
         <div className="head numcenter">ID</div>
-        <div className="head">設問</div>
+        <div className="head nohpad">設問</div>
         <div className="head numcenter">選択肢</div>
 
         <div className="numcenter">999</div>
-        <div>あああ<br />あああああ</div>
+        <div className="nohpad">あああ<br />あああああ</div>
         <div className="numcenter">2</div>
 
         <div className="numcenter">998</div>
-        <div>あああ<br />あいいいい<br />テスト</div>
+        <div className="nohpad">あああ<br />あいいいい<br />テスト</div>
         <div className="numcenter">3</div>
 
         <div className="numcenter">10524</div>
-        <div>テストですの</div>
+        <div className="nohpad">テストですの</div>
         <div className="numcenter">8</div>
     </section>;
 }
