@@ -13,67 +13,85 @@ body
     width: 100%
     position: absolute
     top: 0
+    left: 0
+    right: 0
+    bottom: 0
 
-section.popup
-    width: 80%
-    max-width: 600px
-    margin-left: auto
-    margin-right: auto
-    margin-top: 2em
-    border: 1px solid silver
-    border-radius: 8px
-    background: white
-    filter: drop-shadow(0 0 24px rgba(192, 192, 192, 75%))
-    transition: opacity 1s ease
-    &:not(.show)
+#qedit
+    #popup-overlay
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        backdrop-filter: none
+        pointer-events: none
+        background: white
+        opacity: 0
+        transition: opacity 0.5s
+        &.show
+            backdrop-filter: blur(8px)
+            opacity: 0.5
+    .popup
+        width: 80%
+        max-width: 600px
+        margin-left: auto
+        margin-right: auto
+        margin-top: 2em
+        border: 1px solid silver
+        border-radius: 8px
+        background: white
+        filter: drop-shadow(0 0 24px rgba(192, 192, 192, 75%))
         opacity: 0
         pointer-events: none
-    &.show
-        opacity: 1
-    h1
-        font-weight: bold
-    .container
-        margin: 1em
-        textarea
-            resize: vertical
-        div:not(:first-child):not(.nospace)
-            padding-top: 0.7em
-        .row
-            display: flex
-            label, p
-                flex: 0 0 auto
-            label
-                vertical-align: middle
-            input:not(.inline), textarea, select
+        transition: opacity 0.5s
+        &.show
+            opacity: 1
+            pointer-events: auto
+        h1
+            font-weight: bold
+        .container
+            margin: 1em
+            textarea
+                resize: vertical
+            div:not(:first-child):not(.nospace)
+                padding-top: 0.7em
+            .row
+                display: flex
+                label, p
+                    flex: 0 0 auto
+                label
+                    vertical-align: middle
+                input:not(.inline), textarea, select
+                    flex: 1
+                button
+                    margin-left: 0.4em
+            .row.twoliner
+                display: block
+                input:not(.inline), textarea, select, label, p
+                    display: block
+                    box-sizing: border-box
+                    width: 100%
+            .row.right
+                width: fit-content
+                margin-left: auto
+            .subgroup
+                display: block
+                input:not(.inline), textarea, select, label, p
+                    display: block
+                    box-sizing: border-box
+                    width: 100%
+                header
+                    display: flex
+                    justify-content: space-between
+            ul
+                list-style: none
+                padding-left: 1em
+                li
+                    display: flex
+                    padding-top: 0.3em
+            input.expanded
                 flex: 1
-            button
-                margin-left: 0.4em
-        .row.twoliner
-            display: block
-            input:not(.inline), textarea, select, label, p
-                display: block
-                box-sizing: border-box
-                width: 100%
-        .row.right
-            width: fit-content
-            margin-left: auto
-        .subgroup
-            display: block
-            input:not(.inline), textarea, select, label, p
-                display: block
-                box-sizing: border-box
-                width: 100%
-            header
-                display: flex
-                justify-content: space-between
-        ul
-            list-style: none
-            padding-left: 1em
-            li
-                display: flex
-                padding-top: 0.3em
-        input.expanded
-            flex: 1
 
 section
     h1

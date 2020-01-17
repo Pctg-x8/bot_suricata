@@ -7,7 +7,10 @@ let aw: BrowserWindow = null;
 app.on("ready", () =>
 {
     aw = new BrowserWindow({
-        title: "Question Master Editor"
+        title: "Question Master Editor",
+        webPreferences: {
+            experimentalFeatures: true
+        }
     });
     
     aw.loadFile(path.resolve(__dirname, "index.html"));

@@ -16,6 +16,19 @@ export function showEditorPopup(state: boolean = false, action: Redux.Action<str
     }
 }
 
+type EditTriggerActions = Action.CreateQuestionAction | Action.EditQuestionAction;
+export function editOriginId(state: number | null = null, action: EditTriggerActions): number | null
+{
+    switch (action.type)
+    {
+    case Action.CREATE_QUESTION:
+        return null;
+    case Action.EDIT_QUESTION:
+        return action.payload;
+    default: return state;
+    }
+}
+
 type ChoicesAcceptActions = Redux.Action<typeof Action.NEW_CHOICE> | Action.RemoveChoiceAction | Action.UpdateChoiceAction | Action.UpChoiceAction | Action.DownChoiceAction;
 export function choices(state: Choice[] = [""], action: ChoicesAcceptActions): Choice[]
 {
