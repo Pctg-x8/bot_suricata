@@ -9,6 +9,11 @@ body
     font-weight: normal
     color: #555
 
+#qedit, #qlist
+    width: 100%
+    position: absolute
+    top: 0
+
 section.popup
     width: 80%
     max-width: 600px
@@ -85,18 +90,22 @@ section
             width: 100%
             background: -webkit-linear-gradient(0deg, rgba(160, 160, 160, 0), rgba(160, 160, 160, 0.75), rgba(160, 160, 160, 0))
 
-#qlist
+#qlist>div
     display: grid
     grid-template-columns: auto 1fr auto
     padding: 2em
     div
         padding: 0.5em
         border-bottom: 1px dashed #ccc
+        background: transparent
+        transition: background 0.1s
+        cursor: pointer
     .head
         font-weight: bold
         padding: 2em
         background: #eee
         border-bottom: 1px solid #999
+        cursor: default
     .numcenter
         text-align: center
         display: flex
@@ -105,3 +114,5 @@ section
     .nohpad
         padding-left: 0
         padding-right: 0
+    .selected
+        background: rgba(0, 0, 0, 0.035)

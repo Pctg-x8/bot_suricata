@@ -57,7 +57,7 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                 onClick={_ => d(EditorActions.removeChoice(choices.length, n))}>×</button>
         </li>
     ));
-    return <section className={ [visibilityClasses, "popup"].join(" ") }>
+    return <section className={ [visibilityClasses, "popup"].join(" ") } id="qedit">
         <h1>{title}</h1>
         <div className="container">
             <form>
@@ -107,24 +107,43 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
     </section>;
 }
 
+class QuestionRow
+{
+    constructor(readonly id: number, readonly text: string, readonly numChoices: number) {}
+
+    asRowElement(onRowHover: (_: React.MouseEvent) => void, onRowBlur: (_: React.MouseEvent) => void, selected: boolean): JSX.Element[]
+    {
+        const commonClass = selected ? ["selected"] : [];
+        const text = this.text.split("\n").map((l, n) => n > 0 ? [<br />, l] : [l]);
+
+        return [
+            <div className={[...commonClass, "numcenter"].join(" ")} onMouseOver={onRowHover} onMouseOut={onRowBlur}>{this.id}</div>,
+            <div className={[...commonClass, "nohpad"].join(" ")} onMouseOver={onRowHover} onMouseOut={onRowBlur}>{text}</div>,
+            <div className={[...commonClass, "numcenter"].join(" ")} onMouseOver={onRowHover} onMouseOut={onRowBlur}>{this.numChoices}</div>
+        ];
+    }
+}
+
 function QuestionList(): JSX.Element
 {
+    const [hoverIndex, setHoverIndex] = React.useState<number | null>(null);
+
+    const rows = [
+        new QuestionRow(999, "あああ\nあああああ", 2),
+        new QuestionRow(998, "あああ\n\あいいいい\nテスト", 3),
+        new QuestionRow(10524, "テストですの", 28),
+    ];
+
     return <section id="qlist">
-        <div className="head numcenter">ID</div>
-        <div className="head nohpad">設問</div>
-        <div className="head numcenter">選択肢</div>
+        <div>
+            <div className="head numcenter">ID</div>
+            <div className="head nohpad">設問</div>
+            <div className="head numcenter">選択肢</div>
 
-        <div className="numcenter">999</div>
-        <div className="nohpad">あああ<br />あああああ</div>
-        <div className="numcenter">2</div>
-
-        <div className="numcenter">998</div>
-        <div className="nohpad">あああ<br />あいいいい<br />テスト</div>
-        <div className="numcenter">3</div>
-
-        <div className="numcenter">10524</div>
-        <div className="nohpad">テストですの</div>
-        <div className="numcenter">8</div>
+            {
+                rows.map((r, n) => r.asRowElement(_ => setHoverIndex(n), _ => setHoverIndex(null), hoverIndex == n))
+            }
+        </div>
     </section>;
 }
 
