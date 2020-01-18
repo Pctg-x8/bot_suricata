@@ -129,7 +129,9 @@ function QuestionEditorPopup(): JSX.Element
                         <header>
                             <h3>
                                 <span>選択肢:</span>
-                                <input type="checkbox" id="choiceAtrandom" className="inline" checked={choiceAtrandom} onChange={e => updateChoiceAtrandom(e.target.checked)} />
+                                <input type="checkbox" id="choiceAtrandom" className="inline"
+                                    checked={choiceAtrandom}
+                                    onChange={e => updateChoiceAtrandom(e.target.checked)} />
                                 <label htmlFor="choiceAtrandom">ランダムな順番で出題</label>
                             </h3>
                             <button type="button" onClick={_ => addChoice()}>＋</button>
