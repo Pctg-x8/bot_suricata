@@ -12,6 +12,7 @@ export type EditorState = {
     readonly qText: string,
     readonly choices: Choice[],
     readonly correctNumber: number,
+    readonly choiceAtrandom: boolean,
     readonly correctText: string,
     readonly incorrectText: string
 };
@@ -23,6 +24,7 @@ export function initEditorState(id: number): EditorState
         qText: "",
         choices: [""],
         correctNumber: 0,
+        choiceAtrandom: false,
         correctText: "",
         incorrectText: ""
     };

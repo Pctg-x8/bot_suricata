@@ -9,7 +9,7 @@ body
     font-weight: normal
     color: #555
 
-h1, h2, h3, h4, h5, h6, p, label, ul, li, button
+h1, h2, h3, h4, h5, h6, p, label, ul, li, button, span
     font-size: 100%
 
 #qedit, #qlist
@@ -91,6 +91,11 @@ h1, h2, h3, h4, h5, h6, p, label, ul, li, button
                 header
                     display: flex
                     justify-content: space-between
+                    h1, h2, h3, h4, h5, h6
+                        flex: 1
+                        span, input, label
+                            display: inline
+                            width: fit-content
             ul
                 list-style: none
                 padding-left: 1em

@@ -27,6 +27,7 @@ function QuestionEditorPopup(): JSX.Element
     const [correctNumber, updateCorrectNumber] = React.useState(initEditorState?.correctNumber ?? 0);
     const [difficulty, updateDifficulty] = React.useState(initEditorState?.difficulty ?? 1);
     const [id, updateId] = React.useState(originId ?? 0);
+    const [choiceAtrandom, updateChoiceAtrandom] = React.useState(initEditorState?.choiceAtrandom ?? false);
 
     const saveCurrent = React.useCallback(() =>
     {
@@ -44,6 +45,7 @@ function QuestionEditorPopup(): JSX.Element
         updateDifficulty(initEditorState.difficulty);
         updateChoices(initEditorState.choices);
         updateCorrectNumber(initEditorState.correctNumber);
+        updateChoiceAtrandom(initEditorState.choiceAtrandom);
     }, [initEditorState, originId]);
 
     const upChoicePosition = React.useCallback((n: number) =>
@@ -125,7 +127,11 @@ function QuestionEditorPopup(): JSX.Element
                     </div>
                     <div className="subgroup">
                         <header>
-                            <h3>選択肢:</h3>
+                            <h3>
+                                <span>選択肢:</span>
+                                <input type="checkbox" id="choiceAtrandom" className="inline" checked={choiceAtrandom} onChange={e => updateChoiceAtrandom(e.target.checked)} />
+                                <label htmlFor="choiceAtrandom">ランダムな順番で出題</label>
+                            </h3>
                             <button type="button" onClick={_ => addChoice()}>＋</button>
                         </header>
                         <ul>{choiceUis}</ul>
