@@ -94,7 +94,7 @@ function QuestionEditorPopup(): JSX.Element
                 disabled={choices.length <= 1}
                 onClick={_ => removeChoice(n)}>×</button>
         </li>
-    )), [choices]);
+    )), [choices, correctNumber]);
     return <section id="qedit">
         <div className={visibilityClasses} id="popup-overlay"></div>
         <div className={ [visibilityClasses, "popup"].join(" ") }>
