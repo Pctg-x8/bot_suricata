@@ -219,6 +219,7 @@ function AppMain(): JSX.Element
 
 const store = Redux.createStore(Reducers);
 
-QuestionDBAccessor.load(0).then(console.dir);
+QuestionDBAccessor.loadAllAsTableRow().then(console.dir);
+QuestionDBAccessor.load(1).then(q => console.log("q0", q));
 
 ReactDOM.render(<Provider store={store}><AppMain /></Provider>, document.getElementById("app"));

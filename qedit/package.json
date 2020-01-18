@@ -5,6 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "rebuild-native-deps": "npx electron-rebuild -f && npx electron-rebuild -f -w dist/",
     "launch": "npx electron .",
     "build": "npx webpack"
   },
