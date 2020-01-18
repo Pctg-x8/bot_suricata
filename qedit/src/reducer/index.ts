@@ -1,20 +1,14 @@
 
 import * as Redux from "redux";
-import { choices, difficulty, correctNumber, showEditorPopup, editOriginId } from "./editor";
-import { Choice } from "./types";
+import { initEditorState, editorOriginId } from "./editor";
+import { EditorState } from "./types";
 
 export type State = {
-    showEditorPopup: boolean,
-    editOriginId: number | null,
-    choices: Choice[],
-    difficulty: number,
-    correctNumber: number
+    initEditorState: EditorState | null,
+    editorOriginId: number | null
 };
 
 export default Redux.combineReducers<State>({
-    showEditorPopup,
-    editOriginId,
-    choices,
-    difficulty,
-    correctNumber
+    initEditorState,
+    editorOriginId
 });

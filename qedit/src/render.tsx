@@ -5,6 +5,7 @@ import * as ReactDOM from "react-dom";
 import * as Redux from "redux";
 import { Provider, useSelector, useDispatch } from "react-redux";
 import Reducers, { State } from "./reducer/index";
+import { Choice } from "./reducer/types";
 import * as EditorActions from "./action/editor";
 
 const DifficultyDescText = [
@@ -14,24 +15,18 @@ const DifficultyDescText = [
     "博士論文を読み込むレベルの問題、ですわね......"
 ];
 
-type EditorPopupProperties =
+function QuestionEditorPopup(): JSX.Element
 {
-    editingOriginId?: number
-};
-function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
-{
-    const isEditMode = props.editingOriginId;
-    const title = isEditMode ? "クイズを編集" : "新しいクイズ";
-
     const d = useDispatch();
-    const [
-        show, choices, currentDifficulty, currentCorrectNum
-    ] = useSelector((s: State) => [
-        s.showEditorPopup, s.choices, s.difficulty, s.correctNumber
-    ]);
+    const [originId, initEditorState] = useSelector((s: State) => [s.editorOriginId, s.initEditorState]);
     const qText = React.useRef<HTMLTextAreaElement>();
     const aDescCorrect = React.useRef<HTMLTextAreaElement>();
     const aDescIncorrect = React.useRef<HTMLTextAreaElement>();
+
+    const [choices, updateChoices] = React.useState<Choice[]>(initEditorState?.choices ?? []);
+    const [correctNumber, updateCorrectNumber] = React.useState(initEditorState?.correctNumber ?? 0);
+    const [difficulty, updateDifficulty] = React.useState(initEditorState?.difficulty ?? 1);
+    const [id, updateId] = React.useState(originId ?? 0);
 
     const saveCurrent = React.useCallback(() =>
     {
@@ -40,24 +35,66 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
         console.log(aDescIncorrect.current.value);
     }, [qText, aDescCorrect, aDescIncorrect]);
 
-    const visibilityClasses = show ? "show" : "";
-    const choiceUis = choices.map((ch, n: number) => (
+    // Update InitValue //
+    React.useEffect(() =>
+    {
+        if (!initEditorState) return;
+
+        updateId(originId ?? initEditorState.id);
+        updateDifficulty(initEditorState.difficulty);
+        updateChoices(initEditorState.choices);
+        updateCorrectNumber(initEditorState.correctNumber);
+    }, [initEditorState, originId]);
+
+    const upChoicePosition = React.useCallback((n: number) =>
+    {
+        if (n <= 0) return;
+        if (correctNumber == n - 1) updateCorrectNumber(n);
+        if (correctNumber == n) updateCorrectNumber(n - 1);
+        updateChoices([...choices.slice(0, n - 1), choices[n], choices[n - 1], ...choices.slice(n + 1)]);
+    }, [choices]);
+    const downChoicePosition = React.useCallback((n: number) =>
+    {
+        if (n >= choices.length) return;
+        if (correctNumber == n + 1) updateCorrectNumber(n);
+        if (correctNumber == n) updateCorrectNumber(n + 1);
+        updateChoices([...choices.slice(0, n), choices[n + 1], choices[n], ...choices.slice(n + 2)]);
+    }, [choices]);
+    const addChoice = React.useCallback(() =>
+    {
+        updateChoices([...choices, ""]);
+    }, [choices]);
+    const removeChoice = React.useCallback((n: number) =>
+    {
+        if (choices.length == 1) return;
+        if (correctNumber == choices.length - 1) updateCorrectNumber(choices.length - 2);
+        updateChoices([...choices.slice(0, n), ...choices.slice(n + 1)]);
+    }, [choices]);
+    const updateChoiceText = React.useCallback((n: number, text: string) =>
+    {
+        updateChoices([...choices.slice(0, n), text, ...choices.slice(n + 1)]);
+    }, [choices]);
+
+    const visibilityClasses = initEditorState ? "show" : "";
+    const isEditMode = originId != null;
+    const title = isEditMode ? "クイズを編集" : "新しいクイズ";
+    const choiceUis = React.useMemo(() => choices.map((ch: string, n: number) => (
         <li key={n}>
             <input type="radio" className="inline" name="correct" value={1}
-                checked={currentCorrectNum == n}
-                onChange={_ => d(EditorActions.setCorrectNumber(n))} />
+                checked={correctNumber == n}
+                onChange={_ => updateCorrectNumber(n)} />
             <span>{n + 1}.&nbsp;</span>
             <input type="text" className="inline expanded"
-                value={ch} onChange={e => d(EditorActions.updateChoiceText(n, e.target.value))} />
+                value={ch} onChange={e => updateChoiceText(n, e.target.value)} />
             <button type="button" disabled={n == 0}
-                onClick={_ => d(EditorActions.upChoicePosition(n))}>↑</button>
+                onClick={_ => upChoicePosition(n)}>↑</button>
             <button type="button" disabled={n == choices.length - 1}
-                onClick={_ => d(EditorActions.downChoicePosition(n))}>↓</button>
+                onClick={_ => downChoicePosition(n)}>↓</button>
             <button type="button"
                 disabled={choices.length <= 1}
-                onClick={_ => d(EditorActions.removeChoice(choices.length, n))}>×</button>
+                onClick={_ => removeChoice(n)}>×</button>
         </li>
-    ));
+    )), [choices]);
     return <section id="qedit">
         <div className={visibilityClasses} id="popup-overlay"></div>
         <div className={ [visibilityClasses, "popup"].join(" ") }>
@@ -66,13 +103,13 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                 <form>
                     <div className="row">
                         <label htmlFor="q_id">ID:&nbsp;</label>
-                        <input type="input" id="q_id" defaultValue={props.editingOriginId} />
+                        <input type="number" id="q_id" value={id} onChange={e => updateId(parseInt(e.target.value))} />
                     </div>
                     <div className="row">
                         <label htmlFor="difficulty">推定難易度:&nbsp;</label>
                         <select id="difficulty"
-                            value={currentDifficulty}
-                            onChange={e => d(EditorActions.changeDifficulty(parseInt(e.target.value)))}>
+                            value={difficulty}
+                            onChange={e => updateDifficulty(parseInt(e.target.value))}>
                             <option value={1}>Beginner(1)</option>
                             <option value={2}>Intermediate(2)</option>
                             <option value={3}>Advanced(3)</option>
@@ -80,7 +117,7 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                         </select>
                     </div>
                     <div className="row nospace">
-                        <p style={{ paddingLeft: "6em", opacity: 0.5, fontStyle: "italic" }}>{DifficultyDescText[currentDifficulty - 1]}</p>
+                        <p style={{ paddingLeft: "6em", opacity: 0.5, fontStyle: "italic" }}>{DifficultyDescText[difficulty - 1]}</p>
                     </div>
                     <div className="row twoliner">
                         <label htmlFor="q_text">クイズ内容:</label>
@@ -89,7 +126,7 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                     <div className="subgroup">
                         <header>
                             <h3>選択肢:</h3>
-                            <button type="button" onClick={_ => d(EditorActions.newChoice())}>＋</button>
+                            <button type="button" onClick={_ => addChoice()}>＋</button>
                         </header>
                         <ul>{choiceUis}</ul>
                     </div>
@@ -102,7 +139,7 @@ function QuestionEditorPopup(props: EditorPopupProperties): JSX.Element
                         <textarea id="a_text_desc_incorrect" rows={2} ref={aDescIncorrect}></textarea>
                     </div>
                     <div className="row right">
-                        <button type="button">取り消し</button>
+                        <button type="button" onClick={_ => d(EditorActions.closeQuestion())}>取り消し</button>
                         <button type="button" onClick={saveCurrent}>{!isEditMode ? "作成" : "保存"}</button>
                     </div>
                 </form>
@@ -115,23 +152,23 @@ class QuestionRow
 {
     constructor(readonly id: number, readonly text: string, readonly numChoices: number) {}
 
-    asRowElements(onRowHover: (_: React.MouseEvent) => void, onRowBlur: (_: React.MouseEvent) => void, dispatch: Redux.Dispatch, selected: boolean): JSX.Element[]
+    asRowElements(onRowHover: (_: React.MouseEvent) => void, onRowBlur: (_: React.MouseEvent) => void, dispatch: Redux.Dispatch, selected: boolean, key: string): JSX.Element[]
     {
         const commonClass = selected ? ["selected"] : [];
-        const text = this.text.split("\n").map((l, n) => n > 0 ? [<br />, l] : [l]);
+        const text = this.text.split("\n").map((l, n) => n > 0 ? [<br key={`${key}_Q_${n}`} />, l] : [l]);
 
         return [
-            <div className={[...commonClass, "numcenter"].join(" ")}
+            <div key={`${key}_Id`} className={[...commonClass, "numcenter"].join(" ")}
                 onMouseOver={onRowHover} onMouseOut={onRowBlur}
                 onClick={_ => dispatch(EditorActions.editQuestion(this.id))}>
                     {this.id}
             </div>,
-            <div className={[...commonClass, "nohpad"].join(" ")}
+            <div key={`${key}_Q`} className={[...commonClass, "nohpad"].join(" ")}
                 onMouseOver={onRowHover} onMouseOut={onRowBlur}
                 onClick={_ => dispatch(EditorActions.editQuestion(this.id))}>
                     {text}
             </div>,
-            <div className={[...commonClass, "numcenter"].join(" ")}
+            <div key={`${key}_Ans`} className={[...commonClass, "numcenter"].join(" ")}
                 onMouseOver={onRowHover} onMouseOut={onRowBlur}
                 onClick={_ => dispatch(EditorActions.editQuestion(this.id))}>
                     {this.numChoices}
@@ -158,7 +195,7 @@ function QuestionList(): JSX.Element
             <div className="head numcenter">選択肢</div>
 
             {
-                rows.map((r, n) => r.asRowElements(_ => setHoverIndex(n), _ => setHoverIndex(null), d, hoverIndex == n))
+                rows.map((r, n) => r.asRowElements(_ => setHoverIndex(n), _ => setHoverIndex(null), d, hoverIndex == n, n.toString()))
             }
         </div>
     </section>;
@@ -166,16 +203,10 @@ function QuestionList(): JSX.Element
 
 function AppMain(): JSX.Element
 {
-    const [showEditor, editOriginId] = useSelector((s: State) => [s.showEditorPopup, s.editOriginId]);
-
-    if (showEditor)
-    {
-        return <div><QuestionList /><QuestionEditorPopup editingOriginId={editOriginId} /></div>;
-    }
-    else
-    {
-        return <div><QuestionList /></div>;
-    }
+    return <div>
+        <QuestionList />
+        <QuestionEditorPopup />
+    </div>;
 }
 
 const store = Redux.createStore(Reducers);

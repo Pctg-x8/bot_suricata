@@ -9,6 +9,9 @@ body
     font-weight: normal
     color: #555
 
+h1, h2, h3, h4, h5, h6, p, label, ul, li, button
+    font-size: 100%
+
 #qedit, #qlist
     width: 100%
     position: absolute
@@ -18,20 +21,22 @@ body
     bottom: 0
 
 #qedit
+    pointer-events: none
     #popup-overlay
         position: absolute
         top: 0
         left: 0
         right: 0
         bottom: 0
-        backdrop-filter: none
+        backdrop-filter: blur(0)
         pointer-events: none
         background: white
         opacity: 0
-        transition: opacity 0.5s
+        transition: all 0.5s
         &.show
-            backdrop-filter: blur(8px)
+            backdrop-filter: blur(32px)
             opacity: 0.5
+            pointer-events: auto
     .popup
         width: 80%
         max-width: 600px
@@ -44,9 +49,11 @@ body
         filter: drop-shadow(0 0 24px rgba(192, 192, 192, 75%))
         opacity: 0
         pointer-events: none
-        transition: opacity 0.5s
+        transform: translateY(1em)
+        transition: opacity 0.5s, transform 0.5s
         &.show
             opacity: 1
+            transform: translateY(0)
             pointer-events: auto
         h1
             font-weight: bold

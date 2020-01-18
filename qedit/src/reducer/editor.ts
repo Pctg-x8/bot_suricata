@@ -1,8 +1,38 @@
 
 import * as Redux from "redux";
-import { ParameterizedAction, Choice } from "./types";
+import { ParameterizedAction, Choice, EditorState, initEditorState as newEditorState } from "./types";
 import * as Action from "../action/editor";
 
+export type EditorActions = Action.CreateQuestionAction | Action.EditQuestionAction | Action.CloseQuestionAction;
+export function initEditorState(state: EditorState | null = null, action: EditorActions): EditorState | null
+{
+    switch (action.type)
+    {
+    case Action.CREATE_QUESTION:
+        return newEditorState(0);
+    case Action.EDIT_QUESTION:
+        return newEditorState(action.payload);
+    case Action.CLOSE_QUESTION:
+        return null;
+    default:
+        return state;
+    }
+}
+
+export function editorOriginId(state: number | null = null, action: EditorActions): number | null
+{
+    switch (action.type)
+    {
+    case Action.CREATE_QUESTION:
+        return null;
+    case Action.EDIT_QUESTION:
+        return action.payload;
+    default:
+        return state;
+    }
+}
+
+/*
 export function showEditorPopup(state: boolean = false, action: Redux.Action<string>): boolean
 {
     switch (action.type)
@@ -88,3 +118,4 @@ export function correctNumber(state: number = 0, action: CorrectNumberAcceptActi
     default: return state;
     }
 }
+*/

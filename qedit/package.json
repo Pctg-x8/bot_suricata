@@ -13,6 +13,7 @@
   "devDependencies": {
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
+    "@types/react-redux": "^7.1.6",
     "css-loader": "^3.4.2",
     "electron-rebuild": "^1.8.8",
     "node-sass": "^4.13.0",

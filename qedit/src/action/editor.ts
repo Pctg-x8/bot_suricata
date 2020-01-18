@@ -24,7 +24,11 @@ export function editQuestion(id: number): EditQuestionAction
 }
 
 export const CLOSE_QUESTION = "Suricata.Editor.Action.Editor.Close";
-export function closeQuestion(): Redux.Action<string>
+export interface CloseQuestionAction extends Redux.Action<string>
+{
+    type: typeof CLOSE_QUESTION;
+}
+export function closeQuestion(): CloseQuestionAction
 {
     return { type: CLOSE_QUESTION };
 }
