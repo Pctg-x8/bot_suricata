@@ -37,6 +37,9 @@ const renderMod = {
             { test: /.tsx?$/, loader: "ts-loader" },
             { test: /.sass$/, loader: ["style-loader", "css-loader", "sass-loader"] }
         ]
+    },
+    externals: {
+        sqlite3: "commonjs sqlite3"
     }
 };
 

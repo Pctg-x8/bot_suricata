@@ -1,6 +1,5 @@
 
 import * as Redux from "redux";
-import { ParameterizedAction, Choice } from "../reducer/types";
 
 export const CREATE_QUESTION = "Suricata.Editor.Action.Editor.Create";
 export interface CreateQuestionAction extends Redux.Action<string>

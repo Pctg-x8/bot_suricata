@@ -1,7 +1,7 @@
 
 import * as Redux from "redux";
 import { initEditorState, editorOriginId } from "./editor";
-import { EditorState } from "./types";
+import { EditorState } from "../model/editor";
 
 export type State = {
     initEditorState: EditorState | null,

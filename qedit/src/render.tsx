@@ -5,7 +5,7 @@ import * as ReactDOM from "react-dom";
 import * as Redux from "redux";
 import { Provider, useSelector, useDispatch } from "react-redux";
 import Reducers, { State } from "./reducer/index";
-import { Choice } from "./reducer/types";
+import QuestionDBAccessor, { Choice } from "./model/question";
 import * as EditorActions from "./action/editor";
 
 const DifficultyDescText = [
@@ -218,5 +218,7 @@ function AppMain(): JSX.Element
 }
 
 const store = Redux.createStore(Reducers);
+
+QuestionDBAccessor.load(0).then(console.dir);
 
 ReactDOM.render(<Provider store={store}><AppMain /></Provider>, document.getElementById("app"));

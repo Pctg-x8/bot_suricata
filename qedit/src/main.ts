@@ -9,7 +9,8 @@ app.on("ready", () =>
     aw = new BrowserWindow({
         title: "Question Master Editor",
         webPreferences: {
-            experimentalFeatures: true
+            experimentalFeatures: true,
+            nodeIntegration: true
         }
     });
     
