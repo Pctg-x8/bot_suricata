@@ -36,7 +36,9 @@ pub struct Question
     pub q_text: String,
     pub a_text_desc_correct: String,
     pub a_text_desc_incorrect: String,
-    pub choices: Vec<String>
+    pub ordered_choices: Vec<String>,
+    pub correct_ans_number: u32,
+    pub show_choice_atrandom: bool
 }
 impl Persistent
 {
@@ -46,21 +48,23 @@ impl Persistent
         let con = self.cpool.get()?;
         let mut stmt = con.prepare("Select a_text from choices where q_id=? order by num")?;
 
-        let (qid, difficulty_level, q_text, a_text_desc_correct, a_text_desc_incorrect) = con.query_row(
-            "Select id, difficulty, q_text, a_text_desc_correct, a_text_desc_incorrect from qa order by random() limit 1",
+        let (qid, difficulty_level, q_text, a_text_desc_correct, a_text_desc_incorrect, correct_ans_number, show_choice_atrandom) = con.query_row(
+            "Select id, difficulty, q_text, a_text_desc_correct, a_text_desc_incorrect, correct_answer_num, show_choice_atrandom from qa order by random() limit 1",
             rusqlite::NO_PARAMS,
-            |r| Ok((r.get::<_, u32>(0)?, r.get(1)?, r.get(2)?, r.get(3)?, r.get(4)?))
+            |r| Ok((r.get::<_, u32>(0)?, r.get(1)?, r.get(2)?, r.get(3)?, r.get(4)?, r.get(5)?, r.get(6)?))
         )?;
         let mut crs = stmt.query(&[&qid])?;
 
-        let mut choices = Vec::new();
-        while let Some(r) = crs.next()? { choices.push(r.get(0)?); }
+        let mut ordered_choices = Vec::new();
+        while let Some(r) = crs.next()? { ordered_choices.push(r.get(0)?); }
         
         Ok(Question
         {
             difficulty_level,
             q_text, a_text_desc_correct, a_text_desc_incorrect,
-            choices
+            ordered_choices,
+            correct_ans_number,
+            show_choice_atrandom
         })
     }
 }
