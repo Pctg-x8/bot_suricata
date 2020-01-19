@@ -102,6 +102,11 @@ class QuestionDB
         return new Promise((resv, rej) => this.con.run("Delete from qa where id=?", id,
             (e) => { if (e) rej(e); else resv(); }));
     }
+    getMaxIdNumber(): Promise<number>
+    {
+        return new Promise((resv, rej) => this.con.get("Select max(id) as maxid from qa",
+            (e, r) => { if (e) rej(e); else resv(r.maxid); }))
+    }
 }
 
 const qdb = new QuestionDB();

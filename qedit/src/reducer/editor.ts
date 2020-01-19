@@ -8,7 +8,7 @@ export function initEditorState(state: EditorState | null = null, action: Editor
     switch (action.type)
     {
     case Action.TypeTags.Create:
-        return newEmptyEditorState(0);
+        return newEmptyEditorState(action.payload);
     case Action.TypeTags.Edit:
         return editorStateFromQuestion(action.payload);
     case Action.TypeTags.Close:

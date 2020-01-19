@@ -16,10 +16,15 @@ export enum TypeTags
 export interface CreateQuestionAction extends Redux.Action<string>
 {
     type: TypeTags.Create;
+    payload: number;
 }
-export function createQuestion(): CreateQuestionAction
+export function createQuestion(): ThunkAction<Promise<void>, State, void, CreateQuestionAction>
 {
-    return { type: TypeTags.Create };
+    return async (d: ThunkDispatch<State, void, CreateQuestionAction>) =>
+    {
+        const maxId = await QuestionDBAccessor.getMaxIdNumber();
+        d({ type: TypeTags.Create, payload: maxId + 1 });
+    }
 }
 
 export interface EditQuestionAction extends Redux.Action<string>
