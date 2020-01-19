@@ -1,6 +1,5 @@
 
-import * as sqlite from "sqlite3";
-import { Choice } from "./question";
+import { Choice, Question } from "./question";
 
 export type EditorState = {
     readonly id: number,
@@ -23,5 +22,20 @@ export function newEmptyEditorState(id: number): EditorState
         choiceAtrandom: false,
         correctText: "",
         incorrectText: ""
+    };
+}
+export function editorStateFromQuestion(q: Question): EditorState
+{
+    return {
+        id: q.id,
+        difficulty: q.difficulty,
+        qText: q.qText,
+        choices: q.orderedChoices,
+        // todo
+        correctNumber: 0,
+        // todo
+        choiceAtrandom: false,
+        correctText: q.aTextDescCorrect,
+        incorrectText: q.aTextDescIncorrect
     };
 }

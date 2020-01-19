@@ -1,5 +1,8 @@
 
 import * as Redux from "redux";
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { State } from "../reducer/index";
+import QuestionDBAccessor, { Question } from "../model/question";
 
 export const CREATE_QUESTION = "Suricata.Editor.Action.Editor.Create";
 export interface CreateQuestionAction extends Redux.Action<string>
@@ -15,11 +18,15 @@ export const EDIT_QUESTION = "Suricata.Editor.Action.Editor.Edit";
 export interface EditQuestionAction extends Redux.Action<string>
 {
     type: typeof EDIT_QUESTION;
-    payload: number;
+    payload: Question;
 }
-export function editQuestion(id: number): EditQuestionAction
+export function editQuestion(id: number): ThunkAction<Promise<void>, State, void, EditQuestionAction>
 {
-    return { type: EDIT_QUESTION, payload: id };
+    return async (d: ThunkDispatch<State, void ,EditQuestionAction>) =>
+    {
+        const row = await QuestionDBAccessor.load(id);
+        d({ type: EDIT_QUESTION, payload: row });
+    };
 }
 
 export const CLOSE_QUESTION = "Suricata.Editor.Action.Editor.Close";

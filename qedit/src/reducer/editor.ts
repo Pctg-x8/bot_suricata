@@ -1,5 +1,5 @@
 
-import { EditorState, newEmptyEditorState } from "../model/editor";
+import { EditorState, newEmptyEditorState, editorStateFromQuestion } from "../model/editor";
 import * as Action from "../action/editor";
 
 export type EditorActions = Action.CreateQuestionAction | Action.EditQuestionAction | Action.CloseQuestionAction;
@@ -10,7 +10,7 @@ export function initEditorState(state: EditorState | null = null, action: Editor
     case Action.CREATE_QUESTION:
         return newEmptyEditorState(0);
     case Action.EDIT_QUESTION:
-        return newEmptyEditorState(action.payload);
+        return editorStateFromQuestion(action.payload);
     case Action.CLOSE_QUESTION:
         return null;
     default:
@@ -25,7 +25,7 @@ export function editorOriginId(state: number | null = null, action: EditorAction
     case Action.CREATE_QUESTION:
         return null;
     case Action.EDIT_QUESTION:
-        return action.payload;
+        return action.payload.id;
     default:
         return state;
     }
