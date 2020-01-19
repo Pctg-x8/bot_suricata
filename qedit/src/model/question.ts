@@ -80,12 +80,7 @@ class QuestionDB
     }
     async replace(newValues: Question, oldId?: number): Promise<void>
     {
-        if (oldId && oldId != newValues.id)
-        {
-            // 古いレコードを消す(on delete Cascadeなので対応するchoicesも自動で消える)
-            await new Promise((resv, rej) => this.con.run("Delete from qa where id=?", oldId,
-                (e) => { if (e) rej(e); else resv(); }));
-        }
+        if (oldId && oldId != newValues.id) await this.remove(oldId);
 
         await new Promise((resv, rej) =>
             this.con.run("Replace into qa values (?, ?, ?, ?, ?, ?, ?)", [
@@ -100,6 +95,12 @@ class QuestionDB
         await Promise.all(newValues.orderedChoices.map((c, n) => new Promise((resv, rej) =>
             this.con.run("Replace into choices values (?, ?, ?)", [newValues.id, n, c],
                 (e) => { if (e) rej(e); else resv(e); }))));
+    }
+    remove(id: number): Promise<void>
+    {
+        // on delete Cascadeなので、対応するchoicesも自動で消える
+        return new Promise((resv, rej) => this.con.run("Delete from qa where id=?", id,
+            (e) => { if (e) rej(e); else resv(); }));
     }
 }
 

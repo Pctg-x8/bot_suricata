@@ -112,7 +112,7 @@ function QuestionEditorPopup(): JSX.Element
                 disabled={localEditorState.choices.length <= 1}
                 onClick={_ => removeChoice(n)}>×</button>
         </li>
-    )), [localEditorState.choices, localEditorState.correctNumber]);
+    )), [localEditorState.choices, localEditorState.correctNumber, patchLocalEditorState]);
     return <section id="qedit">
         <div className={visibilityClasses} id="popup-overlay"></div>
         <div className={ [visibilityClasses, "popup"].join(" ") }>
@@ -177,7 +177,7 @@ function QuestionEditorPopup(): JSX.Element
                     </div>
                     <div className="row right">
                         <button type="button" onClick={_ => d(EditorActions.closeQuestion())}>取り消し</button>
-                        <button type="button" onClick={_ => d(EditorActions.saveAndClose(localEditorState))}>
+                        <button type="button" onClick={_ => d(EditorActions.saveAndClose(localEditorState, originId))}>
                             {!isEditMode ? "作成" : "保存"}
                         </button>
                     </div>
@@ -215,6 +215,11 @@ class QuestionRow
                 onMouseOver={onRowHover} onMouseOut={onRowBlur}
                 onClick={_ => dispatch(EditorActions.editQuestion(this.id))}>
                     {this.numChoices}
+            </div>,
+            <div key={`${key}_Del`} className={[...commonClass, "numcenter", "deleteBtn"].join(" ")}
+                onMouseOver={onRowHover} onMouseOut={onRowBlur}
+                onClick={_ => dispatch(EditorActions.removeQuestion(this.id))}>
+                    削除
             </div>
         ];
     }
@@ -227,27 +232,37 @@ function QuestionList(): JSX.Element
 
     const rowModels = useSelector((s: State) => s.questionList);
     const rows = React.useMemo(() => rowModels.map(QuestionRow.FromModel), [rowModels]);
-    /*const rows = [
-        new QuestionRow(999, "あああ\nあああああ", 2),
-        new QuestionRow(998, "あああ\n\あいいいい\nテスト", 3),
-        new QuestionRow(10524, "テストですの", 28),
-    ];*/
 
     React.useEffect(() =>
     {
         // Initial Fetch
         d(AppActions.refreshQuestionList());
     }, []);
+    const hoverOnAppenderRow = hoverIndex >= rows.length;
 
     return <section id="qlist">
         <div>
             <div className="head numcenter">ID</div>
             <div className="head nohpad">設問</div>
             <div className="head numcenter">選択肢</div>
+            <div className="head"></div>
 
             {
                 rows.map((r, n) => r.asRowElements(_ => setHoverIndex(n), _ => setHoverIndex(null), d, hoverIndex == n, n.toString()))
             }
+
+            <div className={hoverOnAppenderRow ? "selected addrow" : "addrow"}
+                onMouseOver={_ => setHoverIndex(rows.length)} onMouseOut={_ => setHoverIndex(null)}
+                onClick={_ => d(EditorActions.createQuestion())}></div>
+            <div className={hoverOnAppenderRow ? "selected nohpad addrow" : "nohpad addrow"}
+                onMouseOver={_ => setHoverIndex(rows.length)} onMouseOut={_ => setHoverIndex(null)}
+                onClick={_ => d(EditorActions.createQuestion())}>追加...</div>
+            <div className={hoverOnAppenderRow ? "selected addrow" : "addrow"}
+                onMouseOver={_ => setHoverIndex(rows.length)} onMouseOut={_ => setHoverIndex(null)}
+                onClick={_ => d(EditorActions.createQuestion())}></div>
+            <div className={hoverOnAppenderRow ? "selected addrow" : "addrow"}
+                onMouseOver={_ => setHoverIndex(rows.length)} onMouseOut={_ => setHoverIndex(null)}
+                onClick={_ => d(EditorActions.createQuestion())}></div>
         </div>
     </section>;
 }

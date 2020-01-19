@@ -13,6 +13,8 @@ div, section, article, header, footer, h1, h2, h3, h4, h5, h6, p, label, ul, li,
     --sc-popup-drop-shadow: rgba(192, 192, 192, 75%)
     --sc-popup-border: silver
     --sc-popup-mask-background: white
+    --sc-table-appender-row-background: #aaf
+    --sc-table-appender-row-background-light: #ccf
 @media(prefers-color-scheme: dark)
     @at-root :root
         --sc-text: #ccc
@@ -24,6 +26,8 @@ div, section, article, header, footer, h1, h2, h3, h4, h5, h6, p, label, ul, li,
         --sc-popup-drop-shadow: rgba(0, 0, 0, 75%)
         --sc-popup-border: #333
         --sc-popup-mask-background: black
+        --sc-table-appender-row-background: #001
+        --sc-table-appender-row-background-light: #112
 
 body
     font-family: system-ui
@@ -146,7 +150,7 @@ section
 
 #qlist>div
     display: grid
-    grid-template-columns: auto 1fr auto
+    grid-template-columns: auto 1fr auto auto
     padding: 2em
     div
         padding: 0.5em
@@ -170,3 +174,10 @@ section
         padding-right: 0
     .selected
         background: var(--sc-table-row-hover)
+    .deleteBtn
+        color: #ccc
+        background: #c00
+    .addrow
+        background: var(--sc-table-appender-row-background)
+        &.selected
+            background: var(--sc-table-appender-row-background-light)

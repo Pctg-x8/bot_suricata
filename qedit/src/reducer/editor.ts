@@ -7,11 +7,11 @@ export function initEditorState(state: EditorState | null = null, action: Editor
 {
     switch (action.type)
     {
-    case Action.CREATE_QUESTION:
+    case Action.TypeTags.Create:
         return newEmptyEditorState(0);
-    case Action.EDIT_QUESTION:
+    case Action.TypeTags.Edit:
         return editorStateFromQuestion(action.payload);
-    case Action.CLOSE_QUESTION:
+    case Action.TypeTags.Close:
         return null;
     default:
         return state;
@@ -22,9 +22,9 @@ export function editorOriginId(state: number | null = null, action: EditorAction
 {
     switch (action.type)
     {
-    case Action.CREATE_QUESTION:
+    case Action.TypeTags.Create:
         return null;
-    case Action.EDIT_QUESTION:
+    case Action.TypeTags.Edit:
         return action.payload.id;
     default:
         return state;
