@@ -3,11 +3,34 @@ div, section, article, header, footer, h1, h2, h3, h4, h5, h6, p, label, ul, li,
     padding: 0
     user-select: none
 
+@at-root :root
+    --sc-text: #555
+    --sc-background: white
+    --sc-table-header-background: #eee
+    --sc-table-header-border: #999
+    --sc-table-row-border: #ccc
+    --sc-table-row-hover: rgba(0, 0, 0, 0.035)
+    --sc-popup-drop-shadow: rgba(192, 192, 192, 75%)
+    --sc-popup-border: silver
+    --sc-popup-mask-background: white
+@media(prefers-color-scheme: dark)
+    @at-root :root
+        --sc-text: #ccc
+        --sc-background: #222
+        --sc-table-header-background: #333
+        --sc-table-header-order: #666
+        --sc-table-row-border: #444
+        --sc-table-row-hover: rgba(255, 255, 255, 0.035)
+        --sc-popup-drop-shadow: rgba(0, 0, 0, 75%)
+        --sc-popup-border: #333
+        --sc-popup-mask-background: black
+
 body
     font-family: system-ui
     font-size: 80%
     font-weight: normal
-    color: #555
+    background: var(--sc-background)
+    color: var(--sc-text)
 
 h1, h2, h3, h4, h5, h6, p, label, ul, li, button, span
     font-size: 100%
@@ -30,7 +53,7 @@ h1, h2, h3, h4, h5, h6, p, label, ul, li, button, span
         bottom: 0
         backdrop-filter: blur(0)
         pointer-events: none
-        background: white
+        background: var(--sc-popup-mask-background)
         opacity: 0
         transition: all 0.5s
         &.show
@@ -43,10 +66,10 @@ h1, h2, h3, h4, h5, h6, p, label, ul, li, button, span
         margin-left: auto
         margin-right: auto
         margin-top: 2em
-        border: 1px solid silver
+        border: 1px solid var(--sc-popup-border)
         border-radius: 8px
-        background: white
-        filter: drop-shadow(0 0 24px rgba(192, 192, 192, 75%))
+        background: var(--sc-background)
+        filter: drop-shadow(0 0 24px var(--sc-popup-drop-shadow))
         opacity: 0
         pointer-events: none
         transform: translateY(1em)
@@ -127,15 +150,15 @@ section
     padding: 2em
     div
         padding: 0.5em
-        border-bottom: 1px dashed #ccc
+        border-bottom: 1px dashed var(--sc-table-row-border)
         background: transparent
         transition: background 0.1s
         cursor: pointer
     .head
         font-weight: bold
         padding: 2em
-        background: #eee
-        border-bottom: 1px solid #999
+        background: var(--sc-table-header-background)
+        border-bottom: 1px solid var(--sc-table-header-border)
         cursor: default
     .numcenter
         text-align: center
@@ -146,4 +169,4 @@ section
         padding-left: 0
         padding-right: 0
     .selected
-        background: rgba(0, 0, 0, 0.035)
+        background: var(--sc-table-row-hover)
