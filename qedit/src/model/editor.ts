@@ -31,10 +31,8 @@ export function editorStateFromQuestion(q: Question): EditorState
         difficulty: q.difficulty,
         qText: q.qText,
         choices: q.orderedChoices,
-        // todo
-        correctNumber: 0,
-        // todo
-        choiceAtrandom: false,
+        correctNumber: q.correctAnsNum,
+        choiceAtrandom: q.showChoiceAtrandom,
         correctText: q.aTextDescCorrect,
         incorrectText: q.aTextDescIncorrect
     };

@@ -9,7 +9,9 @@ export type Question = {
     readonly qText: string,
     readonly aTextDescCorrect: string,
     readonly aTextDescIncorrect: string,
-    readonly orderedChoices: Choice[]
+    readonly orderedChoices: Choice[],
+    readonly correctAnsNum: number,
+    readonly showChoiceAtrandom: boolean
 };
 export type QuestionTableRow = {
     readonly id: number,
@@ -47,7 +49,7 @@ class QuestionDB
     async load(id: number): Promise<Question | null>
     {
         const qrow = await new Promise<any>((resv, rej) =>
-            this.con.prepare("Select id, difficulty, q_text, a_text_desc_correct, a_text_desc_incorrect from qa where id = ?")
+            this.con.prepare("Select id, difficulty, q_text, a_text_desc_correct, a_text_desc_incorrect, correct_answer_num, show_choice_atrandom from qa where id = ?")
                 .get(id, (err, row) => { if (err) rej(err); else resv(row); })
         );
         const stmt_choices = this.con.prepare("Select a_text from choices where q_id = ? order by num");
@@ -69,7 +71,9 @@ class QuestionDB
                     qText: qrow.q_text,
                     aTextDescCorrect: qrow.a_text_desc_correct,
                     aTextDescIncorrect: qrow.a_text_desc_incorrect,
-                    orderedChoices: choices
+                    orderedChoices: choices,
+                    correctAnsNum: qrow.correct_answer_num,
+                    showChoiceAtrandom: qrow.show_choice_atrandom
                 });
             });
         });
