@@ -33,7 +33,7 @@ class QuestionDB
         const rows: QuestionTableRow[] = [];
         return new Promise((resv, rej) =>
             this.con.each(
-                "Select id, q_text, count(q_text) as ans_count from qa left join choices on q_id = id group by q_text",
+                "Select id, q_text, count(id) as ans_count from qa left join choices on q_id = id group by id",
                 (e, r) =>
                 {
                     if (e) return rej(e);
@@ -77,6 +77,29 @@ class QuestionDB
                 });
             });
         });
+    }
+    async replace(newValues: Question, oldId?: number): Promise<void>
+    {
+        if (oldId && oldId != newValues.id)
+        {
+            // 古いレコードを消す(on delete Cascadeなので対応するchoicesも自動で消える)
+            await new Promise((resv, rej) => this.con.run("Delete from qa where id=?", oldId,
+                (e) => { if (e) rej(e); else resv(); }));
+        }
+
+        await new Promise((resv, rej) =>
+            this.con.run("Replace into qa values (?, ?, ?, ?, ?, ?, ?)", [
+                newValues.id,
+                newValues.difficulty,
+                newValues.qText,
+                newValues.correctAnsNum,
+                newValues.showChoiceAtrandom,
+                newValues.aTextDescCorrect,
+                newValues.aTextDescIncorrect
+            ], (e) => { if (e) rej(e); else resv(); }));
+        await Promise.all(newValues.orderedChoices.map((c, n) => new Promise((resv, rej) =>
+            this.con.run("Replace into choices values (?, ?, ?)", [newValues.id, n, c],
+                (e) => { if (e) rej(e); else resv(e); }))));
     }
 }
 

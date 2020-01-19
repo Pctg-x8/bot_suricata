@@ -27,13 +27,6 @@ function QuestionEditorPopup(): JSX.Element
         (diff: Partial<EditorState>) => updateLocalEditorState({ ...localEditorState, ...diff }),
         [updateLocalEditorState, localEditorState]);
 
-    const saveCurrent = React.useCallback(() =>
-    {
-        /*console.log(qText.current.value);
-        console.log(aDescCorrect.current.value);
-        console.log(aDescIncorrect.current.value);*/
-    }, [localEditorState]);
-
     // Update InitValue //
     React.useEffect(() =>
     {
@@ -184,7 +177,9 @@ function QuestionEditorPopup(): JSX.Element
                     </div>
                     <div className="row right">
                         <button type="button" onClick={_ => d(EditorActions.closeQuestion())}>取り消し</button>
-                        <button type="button" onClick={saveCurrent}>{!isEditMode ? "作成" : "保存"}</button>
+                        <button type="button" onClick={_ => d(EditorActions.saveAndClose(localEditorState))}>
+                            {!isEditMode ? "作成" : "保存"}
+                        </button>
                     </div>
                 </form>
             </div>

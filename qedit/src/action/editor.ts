@@ -2,6 +2,8 @@
 import * as Redux from "redux";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { State } from "../reducer/index";
+import { refreshQuestionList } from "./app";
+import { questionFromEditorState, EditorState } from "../model/editor";
 import QuestionDBAccessor, { Question } from "../model/question";
 
 export const CREATE_QUESTION = "Suricata.Editor.Action.Editor.Create";
@@ -109,4 +111,14 @@ export interface DownChoiceAction extends Redux.Action<string>
 export function downChoicePosition(num: number): DownChoiceAction
 {
     return { type: DOWN_CHOICE, payload: num };
+}
+
+export function saveAndClose(st: EditorState): ThunkAction<Promise<void>, State, void, CloseQuestionAction>
+{
+    return async (d: ThunkDispatch<State, void, CloseQuestionAction>) =>
+    {
+        await QuestionDBAccessor.replace(questionFromEditorState(st));
+        d(closeQuestion());
+        d(refreshQuestionList());
+    };
 }

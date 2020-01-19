@@ -1,5 +1,5 @@
 
-import { Choice, Question } from "./question";
+import qdb, { Choice, Question } from "./question";
 
 export type EditorState = {
     readonly id: number,
@@ -35,5 +35,18 @@ export function editorStateFromQuestion(q: Question): EditorState
         choiceAtrandom: q.showChoiceAtrandom,
         correctText: q.aTextDescCorrect,
         incorrectText: q.aTextDescIncorrect
+    };
+}
+export function questionFromEditorState(st: EditorState): Question
+{
+    return {
+        id: st.id,
+        difficulty: st.difficulty,
+        qText: st.qText,
+        orderedChoices: st.choices,
+        correctAnsNum: st.correctNumber,
+        showChoiceAtrandom: st.choiceAtrandom,
+        aTextDescCorrect: st.correctText,
+        aTextDescIncorrect: st.incorrectText
     };
 }
